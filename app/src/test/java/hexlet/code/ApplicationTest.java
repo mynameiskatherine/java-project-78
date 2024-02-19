@@ -69,5 +69,4 @@ public class ApplicationTest {
         List<Boolean> expected = List.of(true, true, true, false, true, true, false);
         assertThat(actual).isEqualTo(expected);
     }
-
 }
