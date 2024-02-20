@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class StringSchema {
+public class StringSchema extends BaseSchema<String> {
+    private Boolean presenceRequirement = false;
     private List<Integer> minLengthRequirement = new ArrayList<>();
     private List<String> contentRequirement = new ArrayList<>();
-    private boolean presenceRequirement = false;
+
     public StringSchema required() {
         if (!presenceRequirement) {
             presenceRequirement = true;
@@ -29,19 +30,20 @@ public class StringSchema {
         return this;
     }
 
-    public boolean isValid(String string) {
-        if (Objects.equals(string, "") || Objects.equals(string, null)) {
+    @Override
+    public Boolean isValid(String objectToCheck) {
+        if (Objects.equals(objectToCheck, "") || Objects.equals(objectToCheck, null)) {
             return !presenceRequirement;
         }
         if (!minLengthRequirement.isEmpty()) {
             Integer minLength = minLengthRequirement.stream().min(Integer::compareTo).get();
-            if (string.length() < minLength) {
+            if (objectToCheck.length() < minLength) {
                 return false;
             }
         }
         if (!contentRequirement.isEmpty()) {
             for (String substring : contentRequirement) {
-                if (!string.contains(substring)) {
+                if (!objectToCheck.contains(substring)) {
                     return false;
                 }
             }
