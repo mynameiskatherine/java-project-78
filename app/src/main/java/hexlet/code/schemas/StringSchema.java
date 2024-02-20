@@ -32,24 +32,23 @@ public class StringSchema extends BaseSchema<String> {
 
     @Override
     public Boolean isValid(String objectToCheck) {
-        if (Objects.equals(objectToCheck, "")) {
-            return !presenceRequirement;
-        } else if (Objects.isNull(objectToCheck)) {
+        Boolean result = true;
+        if (Objects.equals(objectToCheck, "") || Objects.isNull(objectToCheck)) {
             return !presenceRequirement;
         }
         if (!minLengthRequirement.isEmpty()) {
             Integer minLength = minLengthRequirement.stream().min(Integer::compareTo).get();
             if (objectToCheck.length() < minLength) {
-                return false;
+                result = false;
             }
         }
         if (!contentRequirement.isEmpty()) {
             for (String substring : contentRequirement) {
                 if (!objectToCheck.contains(substring)) {
-                    return false;
+                    result = false;
                 }
             }
         }
-        return true;
+        return result;
     }
 }

@@ -38,15 +38,18 @@ public class NumberSchema extends BaseSchema<Integer> {
 
     @Override
     public Boolean isValid(Integer objectToCheck) {
+        Boolean result = true;
         if (Objects.isNull(objectToCheck)) {
             return !presenceRequirement;
         }
         if (positiveRequirement && objectToCheck <= 0) {
-            return false;
+            result = false;
         }
         if (!rangeRequirement.isEmpty()) {
-            return objectToCheck >= rangeRequirement.get("from") && objectToCheck <= rangeRequirement.get("to");
+            if (!(objectToCheck >= rangeRequirement.get("from") && objectToCheck <= rangeRequirement.get("to"))) {
+                result = false;
+            }
         }
-        return true;
+        return result;
     }
 }
