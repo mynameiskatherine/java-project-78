@@ -32,7 +32,9 @@ public class StringSchema extends BaseSchema<String> {
 
     @Override
     public Boolean isValid(String objectToCheck) {
-        if (Objects.equals(objectToCheck, "") || Objects.equals(objectToCheck, null)) {
+        if (Objects.equals(objectToCheck, "")) {
+            return !presenceRequirement;
+        } else if (Objects.isNull(objectToCheck)) {
             return !presenceRequirement;
         }
         if (!minLengthRequirement.isEmpty()) {

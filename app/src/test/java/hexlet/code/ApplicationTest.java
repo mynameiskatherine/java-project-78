@@ -231,7 +231,12 @@ public class ApplicationTest {
         human23.put("lastName", "B");
         actual.add(schema.isValid(human23)); // false
 
-        List<Boolean> expected = List.of(true, true, false, false, true, false, false);
+        Map<String, Object> human24 = new HashMap<>();
+        human4.put("name", "Vasya");
+        human4.put("age", 10);
+        actual.add(schema.isValid(human24)); //false
+
+        List<Boolean> expected = List.of(true, true, false, false, true, false, false, false);
         assertThat(actual).isEqualTo(expected);
     }
 }

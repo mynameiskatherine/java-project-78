@@ -1,13 +1,13 @@
 package hexlet.code.schemas;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class NumberSchema extends BaseSchema<Integer> {
     private Boolean presenceRequirement = false;
     private  Boolean positiveRequirement = false;
-    private List<Integer> rangeRequirement = new ArrayList<>();
+    private Map<String, Integer> rangeRequirement = new HashMap<>();
     public NumberSchema required() {
         if (!presenceRequirement) {
             presenceRequirement = true;
@@ -27,25 +27,25 @@ public class NumberSchema extends BaseSchema<Integer> {
             rangeRequirement.clear();
         }
         if (from < to) {
-            rangeRequirement.add(from);
-            rangeRequirement.add(to);
+            rangeRequirement.put("from", from);
+            rangeRequirement.put("to", to);
         } else {
-            rangeRequirement.add(to);
-            rangeRequirement.add(from);
+            rangeRequirement.put("from", to);
+            rangeRequirement.put("to", from);
         }
         return this;
     }
 
     @Override
     public Boolean isValid(Integer objectToCheck) {
-        if (Objects.equals(objectToCheck, null)) {
+        if (Objects.isNull(objectToCheck)) {
             return !presenceRequirement;
         }
         if (positiveRequirement && objectToCheck <= 0) {
             return false;
         }
         if (!rangeRequirement.isEmpty()) {
-            return objectToCheck >= rangeRequirement.get(0) && objectToCheck <= rangeRequirement.get(1);
+            return objectToCheck >= rangeRequirement.get("from") && objectToCheck <= rangeRequirement.get("to");
         }
         return true;
     }

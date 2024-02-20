@@ -27,25 +27,21 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
 
     @Override
     public Boolean isValid(Map<?, ?> objectToCheck) {
-        if (Objects.equals(objectToCheck, null)) {
+        if (Objects.isNull(objectToCheck)) {
             return !presenceRequirement;
         }
-        if (!Objects.equals(sizeRequirement, null)) {
-            if (objectToCheck.size() != sizeRequirement) {
-                return false;
-            }
+        if (Objects.nonNull(sizeRequirement) && objectToCheck.size() != sizeRequirement) {
+            return false;
         }
-        if (!Objects.equals(shapeRequirement, null)) {
+        if (Objects.nonNull(shapeRequirement)) {
             if (!Objects.equals(shapeRequirement.keySet(), objectToCheck.keySet())) {
                 return false;
             }
-            final Boolean[] result = {true};
-            shapeRequirement.keySet().forEach(k -> {
+            for (Object k : shapeRequirement.keySet()) {
                 if (!shapeRequirement.get(k).isValid(objectToCheck.get(k))) {
-                    result[0] = false;
+                    return false;
                 }
-            });
-            return result[0];
+            }
         }
         return true;
     }
