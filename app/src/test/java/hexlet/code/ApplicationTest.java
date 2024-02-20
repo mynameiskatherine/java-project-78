@@ -3,7 +3,10 @@ package hexlet.code;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -90,6 +93,7 @@ public class ApplicationTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
     void testNumberPositiveOption() {
         Validator v = new Validator();
         var schema = v.number();
@@ -108,6 +112,7 @@ public class ApplicationTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
     void testNumberRangeOption() {
         Validator v = new Validator();
         var schema = v.number();
@@ -125,6 +130,49 @@ public class ApplicationTest {
         actual.add(schema.isValid(20)); //false
 
         List<Boolean> expected = List.of(true, true, true, true, false, true, false, false, false);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void testMapRequiredOption() {
+        Validator v = new Validator();
+        var schema = v.map();
+        List<Boolean> actual = new ArrayList<>();
+
+        actual.add(schema.isValid(null)); // true
+        actual.add(schema.isValid(new HashMap<>())); // true
+        actual.add(schema.isValid(new TreeMap<>())); // true
+        actual.add(schema.isValid(Map.of())); // true
+        actual.add(schema.isValid(Map.of("key", "value"))); // true
+        actual.add(schema.sizeof(1).isValid(null)); // true
+        actual.add(schema.isValid(new TreeMap<>())); // false
+
+        schema.required();
+        actual.add(schema.isValid(null)); // false
+        actual.add(schema.isValid(new HashMap<>())); // false
+        actual.add(schema.isValid(new TreeMap<>())); // false
+        actual.add(schema.isValid(Map.of("key", "value"))); // true
+
+        List<Boolean> expected = List.of(true, true, true, true, true, true, false, false, false, false, true);
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void testMapSizeOption() {
+        Validator v = new Validator();
+        var schema = v.map();
+        List<Boolean> actual = new ArrayList<>();
+
+        schema.required();
+        actual.add(schema.isValid(new HashMap<>())); // true
+        actual.add(schema.isValid(new TreeMap<>())); // true
+        actual.add(schema.sizeof(1).isValid(new TreeMap<>())); // false
+        actual.add(schema.isValid(Map.of("key", "value"))); // true
+
+        actual.add(schema.sizeof(0).isValid(new TreeMap<>())); // true
+        actual.add(schema.isValid(Map.of("key", "value"))); // false
+
+        List<Boolean> expected = List.of(true, true, false, true, true, false);
         assertThat(actual).isEqualTo(expected);
     }
 }
