@@ -1,85 +1,85 @@
 # Validator
 
 ## Description
-Data validator is a Java library that can be used to check the correctness of the data like Strings, Integers and Maps. There are many similar libraries in every language, since almost all programs work with external data that needs to be checked for correctness.
+Data validator is a Java library that can be used to check the correctness of data like Strings, Integers and Maps. There are many similar libraries in every language, since almost all programs work with external data that needs to be checked for correctness.
 
 ## Functionality
 ### General
-To start the work with validator, we need to create new Validator object and new schema object. There are three schemas available: `string()`, `number()` and `map()`.
+To start the work with the validator, we need to create a new Validator object and a new schema object. There are three schemas available: `string()`, `number()` and `map()`.
 ```sh
 var v = new Validator();
 var schema = v.string();
 ```
-Each schema has its own set of options available. We apply them to our schema object, chain calls are available. All the options are cumulative and applicable together. To validate the data, we just call isValid method with our data and recieve true/false validation answer.
+Each schema has its own set of options available. We apply them to our schema object, chain calls are available. All the options are cumulative and applicable together. To validate the data, we just call isValid method with the data and receive a true/false validation answer.
 ```sh
-schema.required().contains("cat").minLength(6).isValid("catty");   //false
-schema.isValid("kittycat");   //true
+schema.required().contains("cat").minLength(6).isValid("catty");   //false
+schema.isValid("kittycat");   //true
 ```
-Note: if reset of applied options needed - just create new schema object.
+Note: If a reset of applied options is needed - just create a new schema object.
 
 ### Strings
 The following validation options are available for string schema:\
 `required()` - requires non-empty string and non-null value. Until this option is applied, empty string and null value will be valid, even if the other options are set.\
-`minLength(int)` - specifies minimal string length. Option accumulates the parameters from each call and applies the smallest one during the validation. Minimal length cannot be below zero.\
-`contains("substring")` - specifies substring, which should be presented in data for validation. Option accumulates the substrings from each call and checks all of them during the validation.
+`minLength(int)` - specifies minimal string length. Option accumulates the parameters from each call and applies the smallest one during the validation. The minimum length cannot be below zero.\
+`contains("substring")` - specifies substring, which should be presented in the data for validation. Option accumulates the substrings from each call and checks all of them during the validation.
 
 ```sh
 var v = new Validator();
 var schema = v.string();
 
-schema.isValid("");   //true
-schema.isValid(null);   //true
-schema.contains("cat").minLength(5).isValid(null);   //true, as required option is not applied
-schema.isValid("");   //true, as required option is not applied
+schema.isValid("");   //true
+schema.isValid(null);   //true
+schema.contains("cat").minLength(5).isValid(null);   //true, as required option is not applied
+schema.isValid("");   //true, as required option is not applied
 schema.required();
-schema.isValid(null);   //false
-schema.isValid("");   //false
-schema.isValid("cat");   //false, as minimal length should be 5 symbols
-schema.isValid("cat was here");   //true
-schema.contains("dog").isValid("dog was here");   //false, as contains option is cumulative itself
+schema.isValid(null);   //false
+schema.isValid("");   //false
+schema.isValid("cat");   //false, as minimal length should be 5 symbols
+schema.isValid("cat was here");   //true
+schema.contains("dog").isValid("dog was here");   //false, as contains option is cumulative itself
 ```
 
 ### Numbers
 The following validation options are available for number schema:\
 `required()` - requires non-null value. Until this option is applied, null value will be valid, even if the other options are set.\
 `positive()` - requires value to be above zero (zero is not positive).\
-`range(int, int)` - requires value to be in specified range, including both borders. Option is not cumulative: new range call will substitute old range requirment.
-Note: number schema is applicable for Integers only.
+`range(int, int)` - requires value to be in specified range, including both borders. The option is not cumulative: new range call will substitute old range requirement.\
+Note: number schema is applicable to Integers only.
 
 ```sh
 var v = new Validator();
 var schema = v.number();
 
-schema.isValid(null);   //true
-schema.positive().range(-10, 15).isValid(null);   //true, as required option is not applied
-schema.isValid(0);   //false, as 0 is not positive
+schema.isValid(null);   //true
+schema.positive().range(-10, 15).isValid(null);   //true, as required option is not applied
+schema.isValid(0);   //false, as 0 is not positive
 schema.required();
-schema.isValid(null);   //false
-schema.isValid(3);   //true
-schema.isValid(-3);   //false, as required to be positive
+schema.isValid(null);   //false
+schema.isValid(3);   //true
+schema.isValid(-3);   //false, as required to be positive
 ```
 
 ### Maps
 The following validation options are available for map schema:\
 `required()` - requires non-null value. Until this option is applied, null value will be valid, even if the other options are set.\
-`sizeof(int)` - specifies exact size for validated map object. Option is not cumulative: new sizeof call will substitute old size requirment.\
-`shape(Map<>)` - specifies patterns for Map values. Schema should be specified for each value. Option is not cumulative: new shape call will substitute old shape requirment.
+`sizeof(int)` - specifies exact size of the validated map object. Option is not cumulative: new sizeof call will substitute old size requirement.\
+`shape(Map<>)` - specifies patterns for Map values. Schema should be specified for each value. The option is not cumulative: new shape call will substitute old shape requirement.
 
 ```sh
 var v = new Validator();
 var schema = v.map();
 
-schema.isValid(null);   // true
-schema.isValid(new HashMap<>());   // true
+schema.isValid(null);   // true
+schema.isValid(new HashMap<>());   // true
 schema.required();
-schema.isValid(null);   // false
-schema.isValid(new HashMap<>());   // true
+schema.isValid(null);   // false
+schema.isValid(new HashMap<>());   // true
 var data = new HashMap<String, String>();
 data.put("key1", "value1");
-schema.isValid(data);   // true
-schema.sizeof(2).isValid(data);   // false
+schema.isValid(data);   // true
+schema.sizeof(2).isValid(data);   // false
 data.put("key2", "value2");
-schema.isValid(data);   // true
+schema.isValid(data);   // true
 
 
 
