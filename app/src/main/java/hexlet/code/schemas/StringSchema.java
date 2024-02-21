@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class StringSchema extends BaseSchema<String> {
+public final class StringSchema extends BaseSchema<String> {
     private Boolean presenceRequirement = false;
     private List<Integer> minLengthRequirement = new ArrayList<>();
     private List<String> contentRequirement = new ArrayList<>();

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class NumberSchema extends BaseSchema<Integer> {
+public final class NumberSchema extends BaseSchema<Integer> {
     private Boolean presenceRequirement = false;
     private  Boolean positiveRequirement = false;
     private Map<String, Integer> rangeRequirement = new HashMap<>();
