@@ -1,7 +1,13 @@
 package hexlet.code.schemas;
 
-public final class NumberSchema extends BaseSchema<Integer, NumberSchema> {
+public final class NumberSchema extends BaseSchema<Integer> {
 
+    public NumberSchema required() {
+        if (!super.presenceRequirement) {
+            super.presenceRequirement = true;
+        }
+        return this;
+    }
     public NumberSchema positive() {
         addCheck(CheckName.INT_POSITIVE, o -> o > 0);
         return this;

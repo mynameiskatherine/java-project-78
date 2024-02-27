@@ -3,9 +3,16 @@ package hexlet.code.schemas;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class StringSchema extends BaseSchema<String, StringSchema> {
+public final class StringSchema extends BaseSchema<String> {
     private List<Integer> minLengthRequirement = new ArrayList<>();
     private List<String> contentRequirement = new ArrayList<>();
+
+    public StringSchema required() {
+        if (!super.presenceRequirement) {
+            super.presenceRequirement = true;
+        }
+        return this;
+    }
 
     public StringSchema minLength(Integer minLength) {
         if (minLength >= 0) {

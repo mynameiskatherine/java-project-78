@@ -208,7 +208,7 @@ public class ApplicationTest {
         human4.put("age", -10);
         actual.add(schema.isValid(human4)); //false
 
-        Map<String, BaseSchema> schemas2 = new HashMap<>();
+        Map<String, BaseSchema<String>> schemas2 = new HashMap<>();
         schemas2.put("firstName", v.string().required());
         schemas2.put("lastName", v.string().required().minLength(2));
 

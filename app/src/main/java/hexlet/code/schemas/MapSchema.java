@@ -3,7 +3,14 @@ package hexlet.code.schemas;
 import java.util.Map;
 import java.util.Objects;
 
-public final class MapSchema extends BaseSchema<Map<?, ?>, MapSchema> {
+public final class MapSchema extends BaseSchema<Map<?, ?>> {
+
+    public MapSchema required() {
+        if (!super.presenceRequirement) {
+            super.presenceRequirement = true;
+        }
+        return this;
+    }
 
     public MapSchema sizeof(Integer size) {
         addCheck(CheckName.MAP_SIZEOF, o -> o.size() == size);
