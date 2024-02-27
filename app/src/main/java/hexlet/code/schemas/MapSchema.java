@@ -3,47 +3,25 @@ package hexlet.code.schemas;
 import java.util.Map;
 import java.util.Objects;
 
-public final class MapSchema extends BaseSchema<Map<?, ?>> {
-    private Boolean presenceRequirement = false;
-    private Integer sizeRequirement;
-    private Map<?, ? extends BaseSchema> shapeRequirement;
-
-    public MapSchema required() {
-        if (!presenceRequirement) {
-            presenceRequirement = true;
-        }
-        return this;
-    }
+public final class MapSchema extends BaseSchema<Map<?, ?>, MapSchema> {
 
     public MapSchema sizeof(Integer size) {
-        sizeRequirement = size;
+        addCheck(CheckName.MAP_SIZEOF, o -> o.size() == size);
         return this;
     }
 
     public MapSchema shape(Map<?, ? extends BaseSchema> mapToShapeTo) {
-        shapeRequirement = mapToShapeTo;
-        return this;
-    }
-
-    @Override
-    public Boolean isValid(Map<?, ?> objectToCheck) {
-        Boolean result = true;
-        if (Objects.isNull(objectToCheck)) {
-            return !presenceRequirement;
-        }
-        if (Objects.nonNull(sizeRequirement) && objectToCheck.size() != sizeRequirement) {
-            result = false;
-        }
-        if (Objects.nonNull(shapeRequirement)) {
-            if (!Objects.equals(shapeRequirement.keySet(), objectToCheck.keySet())) {
-                result = false;
+        addCheck(CheckName.MAP_SHAPE, o -> {
+            if (!Objects.equals(mapToShapeTo.keySet(), o.keySet())) {
+                return false;
             }
-            for (Object k : shapeRequirement.keySet()) {
-                if (!shapeRequirement.get(k).isValid(objectToCheck.get(k))) {
-                    result = false;
+            for (Object k : mapToShapeTo.keySet()) {
+                if (!mapToShapeTo.get(k).isValid(o.get(k))) {
+                    return false;
                 }
             }
-        }
-        return result;
+            return true;
+        });
+        return this;
     }
 }

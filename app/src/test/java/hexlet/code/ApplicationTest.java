@@ -86,8 +86,7 @@ public class ApplicationTest {
         actual.add(schema.range(1, 5).isValid(null)); // true
         actual.add(schema.isValid(0)); //false
 
-        schema.required();
-        actual.add(schema.isValid(null)); //false
+        actual.add(schema.required().isValid(null)); //false
         actual.add(schema.isValid(3)); //true
         actual.add(schema.isValid(33)); //false
 
@@ -101,8 +100,7 @@ public class ApplicationTest {
         var schema = v.number();
         List<Boolean> actual = new ArrayList<>();
 
-        schema.required();
-        actual.add(schema.isValid(-342)); // true
+        actual.add(schema.required().isValid(-342)); // true
         actual.add(schema.isValid(0)); // true
         actual.add(schema.positive().isValid(-2)); // false
         actual.add(schema.isValid(0)); //false
@@ -210,7 +208,7 @@ public class ApplicationTest {
         human4.put("age", -10);
         actual.add(schema.isValid(human4)); //false
 
-        Map<String, BaseSchema<String>> schemas2 = new HashMap<>();
+        Map<String, BaseSchema> schemas2 = new HashMap<>();
         schemas2.put("firstName", v.string().required());
         schemas2.put("lastName", v.string().required().minLength(2));
 
