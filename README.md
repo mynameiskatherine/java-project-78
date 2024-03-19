@@ -6,7 +6,9 @@
 # Validator
 
 ## Description
-Data validator is a Java library that can be used to check the correctness of data like Strings, Integers and Maps. There are many similar libraries in every language, since almost all programs work with external data that needs to be checked for correctness.
+Data validator is a Java library that can be used to check the correctness of data like Strings, Integers and Maps. There are many similar libraries in every language, since almost all programs work with external data that needs to be checked for correctness.\
+*PS. This is a training java project*
+
 
 ## Functionality
 ### General
@@ -25,8 +27,8 @@ Note: If a reset of applied options is needed - just create a new schema object.
 ### Strings
 The following validation options are available for string schema:\
 `required()` - requires non-empty string and non-null value. Until this option is applied, empty string and null value will be valid, even if the other options are set.\
-`minLength(int)` - specifies minimal string length. Option accumulates the parameters from each call and applies the smallest one during the validation. The minimum length cannot be below zero.\
-`contains("substring")` - specifies substring, which should be presented in the data for validation. Option accumulates the substrings from each call and checks all of them during the validation.
+`minLength(int)` - specifies minimal string length. The option is not cumulative: is saves only last sent number. The minimum length cannot be below zero.\
+`contains("substring")` - specifies substring, which should be presented in the data for validation. The option is not cumulative: is saves only last sent substring.
 
 ```sh
 var v = new Validator();
@@ -41,7 +43,7 @@ schema.isValid(null);   //false
 schema.isValid("");   //false
 schema.isValid("cat");   //false, as minimal length should be 5 symbols
 schema.isValid("cat was here");   //true
-schema.contains("dog").isValid("dog was here");   //false, as contains option is cumulative itself
+schema.contains("dog").isValid("dog was here");   //true, as "dog" substituted "cat" in contains requirement
 ```
 
 ### Numbers
